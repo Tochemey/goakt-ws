@@ -6,3 +6,4 @@ Multi Rooms WebSocket Server using [Go-Akt](https://github.com/Tochemey/goakt)
 
 - [ ] Add github action workflow
 - [ ] Make it fully functional
+- [ ] Add unit tests
