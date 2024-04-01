@@ -61,6 +61,10 @@ func NewServer(config *config.Config, logger log.Logger) *Server {
 func (s *Server) Start(ctx context.Context) error {
 	s.logger.Info("starting the socket server...")
 
+	if s.started.Load() {
+		return nil
+	}
+
 	s.actorSystem, _ = actors.NewActorSystem("SocketServer",
 		actors.WithLogger(s.logger),
 		actors.WithPassivationDisabled(),
@@ -97,6 +101,7 @@ func (s *Server) Start(ctx context.Context) error {
 }
 
 func (s *Server) Stop(ctx context.Context) error {
+	s.started.Store(false)
 	return s.actorSystem.Stop(ctx)
 }
 
