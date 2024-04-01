@@ -1,2 +1,3 @@
 # goakt-ws
-[Go] Multi Rooms WebSocket Server
+
+Multi Rooms WebSocket Server using [Go-Akt](https://github.com/Tochemey/goakt)
