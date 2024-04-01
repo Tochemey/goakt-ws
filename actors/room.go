@@ -27,15 +27,12 @@ package actors
 import (
 	"context"
 
-	"github.com/google/uuid"
-
 	"github.com/tochemey/goakt-ws/goaktwspb"
 	"github.com/tochemey/goakt/actors"
 )
 
 // Room represents the room
 type Room struct {
-	id      string
 	name    string
 	clients map[string]actors.PID
 }
@@ -45,7 +42,6 @@ var _ actors.Actor = (*Room)(nil)
 // NewRoom creates a new Room
 func NewRoom(name string) *Room {
 	return &Room{
-		id:      uuid.NewString(),
 		name:    name,
 		clients: make(map[string]actors.PID),
 	}
@@ -66,7 +62,7 @@ func (r *Room) Receive(ctx actors.ReceiveContext) {
 	switch msg := ctx.Message().(type) {
 	case *goaktwspb.JoinRoom:
 		roomID := msg.GetRoomId()
-		if roomID != r.id {
+		if roomID != r.name {
 			ctx.Unhandled()
 		}
 

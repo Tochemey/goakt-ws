@@ -47,10 +47,9 @@ const (
 )
 
 type Client struct {
-	conn   *websocket.Conn
-	id     string
-	server actors.PID
-	self   actors.PID
+	conn        *websocket.Conn
+	coordinator actors.PID
+	self        actors.PID
 
 	logger log.Logger
 
@@ -60,13 +59,12 @@ type Client struct {
 // compilation error
 var _ actors.Actor = (*Client)(nil)
 
-func NewClient(conn *websocket.Conn, clientID string, server actors.PID) *Client {
+func NewClient(conn *websocket.Conn, coordinator actors.PID) *Client {
 	return &Client{
-		conn:   conn,
-		id:     clientID,
-		server: server,
-		logger: log.DefaultLogger,
-		rooms:  make(map[string]actors.PID),
+		conn:        conn,
+		coordinator: coordinator,
+		logger:      log.DefaultLogger,
+		rooms:       make(map[string]actors.PID),
 	}
 }
 
@@ -87,7 +85,7 @@ func (s *Client) Receive(ctx actors.ReceiveContext) {
 		_, ok := s.rooms[roomID]
 
 		if !ok {
-			ctx.Tell(s.server, &goaktwspb.JoinRoom{RoomId: roomID})
+			ctx.Tell(s.coordinator, &goaktwspb.JoinRoom{RoomId: roomID})
 			return
 		}
 
@@ -99,7 +97,7 @@ func (s *Client) Receive(ctx actors.ReceiveContext) {
 		_, ok := s.rooms[roomID]
 
 		if !ok {
-			ctx.Tell(s.server, &goaktwspb.LeaveRoom{RoomId: roomID})
+			ctx.Tell(s.coordinator, &goaktwspb.LeaveRoom{RoomId: roomID})
 			return
 		}
 
