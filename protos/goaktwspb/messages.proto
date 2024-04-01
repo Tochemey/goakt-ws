@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package goaktwspb;
+
+option go_package = "github.com/tochemey/goakt-ws/goaktwspb;goaktwspb";
+
+// Message defines the websocket message sent
+message Message {
+  // Specifies the message content
+  string content = 1 [json_name = "content"];
+  // Specifies the target room
+  string target = 2 [json_name = "target"];
+}
+
+message JoinRoom {
+  string room_id = 1;
+}
+
+message LeaveRoom {
+  string room_id = 1;
+}
+
+message RoomJoined {
+  string room_id = 1;
+}
+
+message RoomLeft {
+  string room_id = 1;
+}
